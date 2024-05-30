@@ -99,3 +99,44 @@ interview_preparation_task = Task(
     agent=interview_preparer
 )
 
+
+## Creating the CREW
+job_application_crew = Crew(
+    agents=[researcher,
+            profiler,
+            resume_strategist,
+            interview_preparer],
+
+    tasks=[research_task,
+           profile_task,
+           resume_strategy_task,
+           interview_preparation_task],
+
+    verbose=True
+)
+
+## Running the Crew
+# Set the inputs for the execution of the crew.
+
+job_application_inputs = {
+    'job_posting_url': 'https://www.google.com/search?q=IBM+Generative+AI+developer+job&oq=IBM+Generative+AI+developer+job&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQLhhA0gEJMTM0NzFqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8&ibp=htl;jobs&htidocid=QW-A1gKy_AIkmQGNAAAAAA%3D%3D&sa=X&ved=2ahUKEwik3qaz57WGAxXmk1YBHbjXAHkQkd0GegQIERAB#fpstate=tldetail&htivrt=jobs&htiq=IBM+Generative+AI+developer+job&htidocid=QW-A1gKy_AIkmQGNAAAAAA%3D%3D&sxsrf=ADLYWIIMiqTXv_35TSLVUbF9aCG8-yLomg:1717086961911',
+    'github_url': 'https://github.com/Ram580',
+    'personal_writeup': """Highly motivated and results-oriented Data Analyst with 2.5 years of experience driving data-driven decision making through advanced analytics, ML, Deep learning, NLP and Generative AI solutions.
+    adept at various domains – marketing analytics , manufacturing, pharma and airlines.  and expert in multiple
+    programming languages and frameworks.His Experties are Advanced Analytics : Utilized Machine learning(Regression, Classification, Time series forecasting), Deep Learning (LSTM), NLP, and GenAI (Langchain) to solve complex business problems in Pharma and Healthcare.
+ETL Pipeline Development: Built and automated efficient ETL pipelines  leveraging Python, SQL, PySpark that reduced data turnaround time by 30%.
+Generative AI: Expertise in LLM fine-tuning (PEFT), RLHF, prompt engineering for various AI models, RAG Applications, Multimodal AI applications development, evaluation and deployment,
+Actionable Insights & Dashboards: Created high-performance dashboards (Power BI, Tableau) to empower data-driven decision making (e.g., patient churn reduction).
+Forecasting & Modeling: Built, finetuned and enhanced multiple forecasting models for various use cases like regression, classification, time series forecasting etc.,
+Project Leadership: Mentored data science interns and led junior analysts in various data science projects (EDA to deployment).
+Cross-Industry Experience: Possesses experience in diverse sectors (Pharma, Healthcare, Airlines).
+Project Versatility: Implemented projects ranging from prescriber choice model for measuring campaign effectiveness in pharma, airline resource allocation (passenger footfall forecasting), Gen AI knowledge repositories chatbot (Langchain, LLMs).
+Cloud and Deployment Skills: Utilized tools like Docker, Git, Github Actions and AWS Sagemaker, Amazon Bedrock, S3, AWS Lambda, API Gateway, AWS RDS for project deployments
+"""
+}
+
+### this execution will take a few minutes to run
+result = job_application_crew.kickoff(inputs=job_application_inputs)
+
+from IPython.display import Markdown, display
+display(Markdown("./tailored_resume.md"))
