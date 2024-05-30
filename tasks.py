@@ -8,7 +8,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
-from utils import get_openai_api_key, get_serper_api_key
 
 # Setup the Gemini pro LLM
 llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0, verbose=True, google_api_key=os.environ["GOOGLE_API_KEY"],convert_system_message_to_human=True)
@@ -21,7 +20,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from agents import researcher, profiler, resume_strategist, interview_preparer
-from utils import pretty_print_result
 
 
 ## Create the tasks
@@ -136,7 +134,10 @@ Cloud and Deployment Skills: Utilized tools like Docker, Git, Github Actions and
 }
 
 ### this execution will take a few minutes to run
-result = job_application_crew.kickoff(inputs=job_application_inputs)
+def kickoff_crew(inputs):
+    result = job_application_crew.kickoff(inputs=inputs)
+    return result
+    
 
-from IPython.display import Markdown, display
-display(Markdown("./tailored_resume.md"))
+# from IPython.display import Markdown, display
+# display(Markdown("./tailored_resume.md"))

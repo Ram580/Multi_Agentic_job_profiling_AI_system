@@ -8,7 +8,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
-from utils import get_openai_api_key, get_serper_api_key
 
 # Setup the Gemini pro LLM
 llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0, verbose=True, google_api_key=os.environ["GOOGLE_API_KEY"],convert_system_message_to_human=True)
@@ -30,10 +29,33 @@ from crewai_tools import (
   SerperDevTool
 )
 
+import streamlit as st
+# Create the "inputs" folder if it doesn't exist
+if not os.path.exists("inputs"):
+    os.makedirs("inputs")
+# File Upload
+#uploaded_files = st.file_uploader("Upload files", accept_multiple_files=True)
+
+def save_uploaded_file(uploaded_file):
+    """
+    Saves the uploaded file to the 'inputs' folder.
+    """
+    file_path = os.path.join("inputs", uploaded_file.name)
+    with open(file_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    return file_path
+
+# Uplading the files to inputs folder
+uploaded_file = st.file_uploader("Upload a file")
+
+if uploaded_file:
+    saved_file_path = save_uploaded_file(uploaded_file)
+    st.success(f"File saved to: {saved_file_path}")
+
 search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
-read_resume = FileReadTool(file_path='./Ram_Resume_May2024.pdf')
-semantic_search_resume = PDFSearchTool(mdx=r"./Ram_Resume_May2024.pdf")
+read_resume = FileReadTool(file_path='inputs\Ram_Resume_2024.pdf')
+semantic_search_resume = PDFSearchTool(mdx='inputs\Ram_Resume_2024.pdf')
 
 
 ## Creating the agents
@@ -53,7 +75,8 @@ researcher = Agent(
         "qualifications and skills sought "
         "by employers, forming the foundation for "
         "effective application tailoring."
-    )
+    ),
+    llm = llm
 )
 
 # Agent 2: Profiler
@@ -70,7 +93,8 @@ profiler = Agent(
         "from diverse sources to craft comprehensive "
         "personal and professional profiles, laying the "
         "groundwork for personalized resume enhancements."
-    )
+    ),
+    llm = llm
 )
 
 # Agent 3: Resume Strategist
@@ -86,7 +110,8 @@ resume_strategist = Agent(
         "excel at refining resumes to highlight the most "
         "relevant skills and experiences, ensuring they "
         "resonate perfectly with the job's requirements."
-    )
+    ),
+    llm = llm
 )
 
 # Agent 4: Interview Preparer
@@ -103,6 +128,7 @@ interview_preparer = Agent(
         "and talking points, you prepare candidates for success, "
         "ensuring they can confidently address all aspects of the "
         "job they are applying for."
-    )
+    ),
+    llm = llm
 )
 
